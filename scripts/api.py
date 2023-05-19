@@ -5,7 +5,6 @@ import requests
 import os
 import gradio as gr
 import subprocess
-import lora
 import modules.shared
 
 from modules.api.models import *
@@ -35,7 +34,6 @@ def civitdown_api(_: gr.Blocks, app: FastAPI):
             os.chdir("/content/automatic/models/Lora")
         env = os.environ.copy()
         subprocess.run(fulltext, shell=True, env=env)
-        lora.list_available_loras()
         modules.shared.refresh_checkpoints()
         return {"name": dname, "url": durl}
     @app.post("/civitdown/removefile")
