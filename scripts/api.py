@@ -38,6 +38,19 @@ def civitdown_api(_: gr.Blocks, app: FastAPI):
         lora.list_available_loras()
         modules.shared.refresh_checkpoints()
         return {"name": dname, "url": durl}
+    @app.post("/civitdown/removefile")
+    async def removefile(
+        name: str = Body("query", title='Model name'),
+        mtype: str = Body("none", title='Model type')
+    ):
+        if mtype == "model":
+            os.chdir("/content/automatic/models/Stable-diffusion")
+        elif mtype == "lora":
+            os.chdir("/content/automatic/models/Lora")
+        fulltext = "rm "+name
+        env = os.environ.copy()
+        subprocess.run(fulltext, shell=True, env=env)
+        return "success"
 try:
     import modules.script_callbacks as script_callbacks
 
