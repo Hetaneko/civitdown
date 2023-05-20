@@ -37,6 +37,8 @@ def civitdown_api(_: gr.Blocks, app: FastAPI):
             os.chdir("/content/automatic/models/Stable-diffusion")
         elif mtype == "lora":
             os.chdir("/content/automatic/models/Lora")
+        elif mtype == "lycoris":
+            os.chdir("/content/automatic/models/Lycoris")
         env = os.environ.copy()
         subprocess.run(fulltext, shell=True, env=env)
         modules.shared.refresh_checkpoints()
@@ -50,6 +52,8 @@ def civitdown_api(_: gr.Blocks, app: FastAPI):
             os.chdir("/content/automatic/models/Stable-diffusion")
         elif mtype == "lora":
             os.chdir("/content/automatic/models/Lora")
+        elif mtype == "lycoris":
+            os.chdir("/content/automatic/models/Lycoris")
         fulltext = "rm "+name
         env = os.environ.copy()
         subprocess.run(fulltext, shell=True, env=env)
