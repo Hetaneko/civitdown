@@ -30,9 +30,9 @@ def civitdown_api(_: gr.Blocks, app: FastAPI):
             response2 = r2.json()
             durl = response2["modelVersions"][0]["files"][0]["downloadUrl"]
             dname = response2["modelVersions"][0]["files"][0]["name"]
-            fulltext = "wget "+durl+" -O "+dname
+            fulltext = "wget '"+durl+"' -O '"+dname+"'"
         else:
-            fulltext = "wget "+link+" -O "+linkname
+            fulltext = "wget '"+link+"' -O '"+linkname+"'"
         if mtype == "model":
             os.chdir("/content/automatic/models/Stable-diffusion")
         elif mtype == "lora":
