@@ -34,11 +34,11 @@ def civitdown_api(_: gr.Blocks, app: FastAPI):
         else:
             fulltext = "wget '"+link+"' -O '"+linkname+"'"
         if mtype == "model":
-            os.chdir("/content/automatic/models/Stable-diffusion")
+            os.chdir("/kaggle/working/mikww/models/Stable-diffusion")
         elif mtype == "lora":
-            os.chdir("/content/automatic/models/Lora")
+            os.chdir("/kaggle/working/mikww/models/Lora")
         elif mtype == "lycoris":
-            os.chdir("/content/automatic/models/LyCORIS")
+            os.chdir("/kaggle/working/mikww/models/LyCORIS")
         env = os.environ.copy()
         subprocess.run(fulltext, shell=True, env=env)
         modules.shared.refresh_checkpoints()
@@ -49,11 +49,11 @@ def civitdown_api(_: gr.Blocks, app: FastAPI):
         mtype: str = Body("none", title='Model type')
     ):
         if mtype == "model":
-            os.chdir("/content/automatic/models/Stable-diffusion")
+            os.chdir("/kaggle/working/mikww/models/Stable-diffusion")
         elif mtype == "lora":
-            os.chdir("/content/automatic/models/Lora")
+            os.chdir("/kaggle/working/mikww/models/Lora")
         elif mtype == "lycoris":
-            os.chdir("/content/automatic/models/LyCORIS")
+            os.chdir("/kaggle/working/mikww/models/LyCORIS")
         fulltext = "rm "+name
         env = os.environ.copy()
         subprocess.run(fulltext, shell=True, env=env)
