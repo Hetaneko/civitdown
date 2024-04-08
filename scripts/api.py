@@ -41,6 +41,7 @@ def civitdown_api(_: gr.Blocks, app: FastAPI):
                 link = link + "&" + tt
             else:
                 link = link + "?" + tt
+            fulltext = "wget '"+link+"' -O '"+linkname+"'"
         if mtype == "model":
             os.chdir("/kaggle/working/mikww/models/Stable-diffusion")
         elif mtype == "lora":
