@@ -32,15 +32,15 @@ def civitdown_api(_: gr.Blocks, app: FastAPI):
             durl = response2["modelVersions"][0]["files"][0]["downloadUrl"]
             dname = response2["modelVersions"][0]["files"][0]["name"]
             if "?" in durl:
-                durl = durl + "&" + tt
+                durl = durl + "&" + "token=" + tt
             else:
-                durl = durl + "?" + tt
+                durl = durl + "?" + "token=" + tt
             fulltext = "wget '"+durl+"' -O '"+dname+"'"
         else:
             if "?" in link:
-                link = link + "&" + tt
+                link = link + "&" + "token=" + tt
             else:
-                link = link + "?" + tt
+                link = link + "?" + "token=" + tt
             fulltext = "wget '"+link+"' -O '"+linkname+"'"
         if mtype == "model":
             os.chdir("/kaggle/working/mikww/models/Stable-diffusion")
