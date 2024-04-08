@@ -10,6 +10,7 @@ import modules.shared
 from modules.api.models import *
 from modules.api import api
 
+tt = "87d3586af21cc19bbb16a36164aa34a9"
 
 def civitdown_api(_: gr.Blocks, app: FastAPI):
     @app.post("/civitdown/download")
@@ -30,9 +31,16 @@ def civitdown_api(_: gr.Blocks, app: FastAPI):
             response2 = r2.json()
             durl = response2["modelVersions"][0]["files"][0]["downloadUrl"]
             dname = response2["modelVersions"][0]["files"][0]["name"]
+            if "?" in durl:
+                durl = durl + "&" + tt
+            else:
+                durl = durl + "?" + tt
             fulltext = "wget '"+durl+"' -O '"+dname+"'"
         else:
-            fulltext = "wget '"+link+"' -O '"+linkname+"'"
+            if "?" in link:
+                link = link + "&" + tt
+            else:
+                link = link + "?" + tt
         if mtype == "model":
             os.chdir("/kaggle/working/mikww/models/Stable-diffusion")
         elif mtype == "lora":
