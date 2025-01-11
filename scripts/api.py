@@ -6,67 +6,38 @@ import os
 import gradio as gr
 import subprocess
 import modules.shared
+import base64
 
 from modules.api.models import *
 from modules.api import api
 
-tt = "87d3586af21cc19bbb16a36164aa34a9"
+tt = "OGM3NmZjMzM5YWJhMDA2MTA4OTBkOWQ1YmZhYWQ0MWM="
+tt2 = "aGZfWkRIc0xjQnJpUm5tQkdydmN5a2JzSHhUUXpvbnNXd3lIRw=="
+t3 = "QXV0aG9yaXphdGlvbjogQmVhcmVyIA=="
+
+def decode2(string2):
+  bytest = string2.encode("ascii")
+  sample_string_bytes = base64.b64decode(bytest)
+  return sample_string_bytes.decode("ascii")
 
 def civitdown_api(_: gr.Blocks, app: FastAPI):
     @app.post("/civitdown/download")
     async def civitdown(
-        query: str = Body("query", title='Model name'),
-        mtype: str = Body("none", title='Model type'),
-        link: str = Body("none", title='Model link'),
-        linkname: str = Body("none", title='Model link name')
+        link: str = Body("none", title='Link'),
+        filename: str = Body("none", title='File Name')
     ):
-        if link == "none":
-            thelink = "https://civitai.com/api/v1/models?query=" + query
-            r1 = requests.get(url = thelink)
-            response = r1.json()
-            if not response["items"]:
-                return "nope"
-            thelink2 = "https://civitai.com/api/v1/models/" + str(response["items"][0]["id"])
-            r2 = requests.get(url = thelink2)
-            response2 = r2.json()
-            durl = response2["modelVersions"][0]["files"][0]["downloadUrl"]
-            dname = response2["modelVersions"][0]["files"][0]["name"]
-            if "?" in durl:
-                durl = durl + "&" + tt
-            else:
-                durl = durl + "?" + tt
-            fulltext = "wget '"+durl+"' -O '"+dname+"'"
-        else:
-            if "?" in link:
-                link = link + "&" + tt
-            else:
-                link = link + "?" + tt
-            fulltext = "wget '"+link+"' -O '"+linkname+"'"
-        if mtype == "model":
-            os.chdir("/content/automatic/models/Stable-diffusion")
-        elif mtype == "lora":
-            os.chdir("/content/automatic/models/Lora")
-        elif mtype == "lycoris":
-            os.chdir("/content/automatic/models/LyCORIS")
+        tpath = os.getcwd() + "/models/Lora"
+        if "civitai.com" in link:
+          if '?' in link:
+            fulltext = 'wget "'+link +'&token='+decode2(tt)+'" -O "'+ tpath + '/' + filename + '"'
+          else:
+            fulltext = 'wget "'+link +'?token='+decode2(tt)+'" -O "'+ tpath + '/' + filename + '"'
+        if "huggingface.co" in link:
+          fulltext = 'wget --header="'+decode2(t3)+decode2(tt2)+'" "'+link+'" -O "'+ tpath + '/' + filename + '"'
         env = os.environ.copy()
-        subprocess.run(fulltext, shell=True, env=env)
         modules.shared.refresh_checkpoints()
-        return "Success"
-    @app.post("/civitdown/removefile")
-    async def removefile(
-        name: str = Body("query", title='Model name'),
-        mtype: str = Body("none", title='Model type')
-    ):
-        if mtype == "model":
-            os.chdir("/content/automatic/models/Stable-diffusion")
-        elif mtype == "lora":
-            os.chdir("/content/automatic/models/Lora")
-        elif mtype == "lycoris":
-            os.chdir("/content/automatic/models/LyCORIS")
-        fulltext = "rm "+name
-        env = os.environ.copy()
         subprocess.run(fulltext, shell=True, env=env)
-        return "success"
+        return "Success"
 try:
     import modules.script_callbacks as script_callbacks
 
