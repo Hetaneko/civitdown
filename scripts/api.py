@@ -3,9 +3,10 @@ from fastapi import FastAPI, Body
 from fastapi.exceptions import HTTPException
 import requests
 import os
+import networks
 import gradio as gr
 import subprocess
-import modules.shared
+import modules
 import base64
 
 from modules.api.models import *
@@ -35,8 +36,8 @@ def civitdown_api(_: gr.Blocks, app: FastAPI):
         if "huggingface.co" in link:
           fulltext = 'wget --header="'+decode2(t3)+decode2(tt2)+'" "'+link+'" -O "'+ tpath + '/' + filename + '"'
         env = os.environ.copy()
-        modules.shared.refresh_checkpoints()
         subprocess.run(fulltext, shell=True, env=env)
+        networks.list_available_networks()
         return "Success"
 try:
     import modules.script_callbacks as script_callbacks
